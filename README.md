@@ -1,5 +1,11 @@
 # Deploying a Web Application using Helm in Kubernetes
 
+## Why Helm charts are needed
+- Helm charts are packages or collections of kubernetes resources.
+- They simplify the deployment and management of applications in Kubernetes by binding all neccessary resources into a single manageable unit.
+- Helm charts promote reusability and consistency, allowing you to define, install and upgrade even the most complex Kubernetes application easily.
+- Helm installs the whole dependency tree of a project if you run the install command for the top-level chart. You just a single command to install your entire application, instead of listing the files to install via kubectl.
+
 ## Overview
 We will deploy a simple web application in a kubernetes cluster using Helm. This demo covers using Helm charts, customizing `deployments` with `templates` and `values`, installing and running Helm, and integrating Helm into a CI/CD pipeline.
 
@@ -100,6 +106,39 @@ sudo apt-get install docker-ce docker-ce-cli containerd.io docker-buildx-plugin 
 ![alt text](<Images/git push.PNG>)
 
 
+## Step 3: Customize the Helm chart
 
+It's pretty easy to create a chart in Helm. First, you need to have Helm installed. Then, just type in helm create <chart name> and it will create a directory filled with files and other directories. Those files are required for Helm to create a chart.
+
+Let's take a closer look at what this file tree looks like and what the files are within it:
+
+- **chart.yaml:** This is where you'll put the information related to your chart. That includes the chart version, name, and description so you can find it if you publish it on an open repository. Also in this file you'll be able to set external dependencies using the dependencies key.
+
+- **values.yaml:** Like we saw before, this is the file that contains defaults for variables.
+
+- **templates (dir):** This is the place where you'll put all your manifest files. Everything in here will be passed on and created in Kubernetes.
+
+- **charts:** If your chart depends on another chart you own, or if you don't want to rely on Helm's default library (the default registry where Helm pull charts from), you can bring this same structure inside this directory. Chart dependencies are installed from the bottom to the top, which means if chart A depends on chart B, and B depends on C, the installation order will be C ->B ->A.
+
+There are other fields, but these are the most common, and they're the required ones.
+
+**A quick note:** When installing Helm, make sure you're installing version 3. Version 2 still works, but it needs a server-side component called Tiller, which ties your helm installation to a single cluster. Helm 3 removed this need with the addition of several CRDs, but it's not supported in all Kubernetes versions.
+
+1. Modify `values.yaml` using a text editor
+
+```
+replicaCount: 2
+
+image:
+  repository: nginx
+  tag: stable
+  pullPolicy: IfNotPresent
+```
+
+![alt text](<Images/modify values.PNG>)
+
+- This configuration will deploy 2 replicas (`replicaCount: 2`) of the nginx server.
+
+- Save your changes
 
 
