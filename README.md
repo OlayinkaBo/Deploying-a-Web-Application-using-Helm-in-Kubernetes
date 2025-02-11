@@ -124,7 +124,7 @@ There are other fields, but these are the most common, and they're the required 
 
 **A quick note:** When installing Helm, make sure you're installing version 3. Version 2 still works, but it needs a server-side component called Tiller, which ties your helm installation to a single cluster. Helm 3 removed this need with the addition of several CRDs, but it's not supported in all Kubernetes versions.
 
-1. Modify `values.yaml` using a text editor
+1. Modify `values.yaml` using a text editor.
 
 ```
 replicaCount: 2
@@ -141,4 +141,8 @@ image:
 
 - Save your changes
 
+2. Customize `templates/deployment.yaml`:
 
+- Open the `deployment.yaml` file in the `templates/` directory.
+
+- Remove the line below from under 
