@@ -232,7 +232,14 @@ To find it, use
 - Set the pipeline source as the git repository you pushed your code to.
 - Configure the pipeline to trigger on build on commit to your repository.
 
-**3. Pipeline Script example with full Helm path:**
+
+![alt text](<Images/Jenkins config.PNG>)
+*Jenkins configuration* 
+
+![alt text](Images/webhooks.PNG)
+*Webhooks configuration on Github*
+
+**4. Pipeline Script example with full Helm path:**
 
 - Use the determned full path of Helm in the in the pipeline script. For example:
 
@@ -259,9 +266,11 @@ Replace `/usr/local/bin/helm` with the path determined in step 2.
 **1. Update Helm chart and push changes:**
 
 - Edit the `values.yaml` file
-  - Open  values.yaml  in your `my-webapp` chart directory.
+  - Open  values.yaml  in your `my-app` chart directory.
   - Change the `replicaCount` to 3 to increase the number of replicas.
   - Save the changes.
+
+  ![alt text](Images/values.png)
 
 - Edit the `templates/deployment.yaml` file:
   - Open `deployment.yaml` file located in the `templates` directory. 
@@ -276,6 +285,9 @@ Replace `/usr/local/bin/helm` with the path determined in step 2.
   ```
 - Save the file after making your changes.
 
+![alt text](<Images/deploy updated.png>)
+
+
 **2. Commit and push changes:**
 
 - Use git commands to commit your changes and push them to the remote repository. This will trigger the Jenkins pipeline.
@@ -288,7 +300,7 @@ git push
 ```
 
 **3. Jenkins Pipeline Trigger:**
-- Once you push ypur changes to the repository, the configured Henkins pipeline will detect the commit.
+- Once you push ypur changes to the repository, the configured Jenkins pipeline will detect the commit.
 - Jenkins will then automatically start a new build, deploying your updated Helm chart with the new configuration,
 
 
