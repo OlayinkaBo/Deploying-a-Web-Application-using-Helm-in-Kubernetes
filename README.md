@@ -179,3 +179,117 @@ git push
 
 ![alt text](<Images/customized Helm chart.PNG>)
 
+## Step 4: Deploying your Application
+
+**1. Deploy with Helm**: Navigate to the root of your project directory `my-webapp`.
+Deploy the application on Kubernetes using the command below:
+
+`helm install my-app ./app`
+
+![alt text](<Images/helm install my-app.PNG>)
+
+**2. Check Deployment**:
+kubectl get deployments
+
+![alt text](<Images/get deployment.PNG>)
+
+**3. Visit Application URL**: Get the application Url by running the below commands:
+
+```
+export POD_NAME=$(kubectl get pods --namespace default -l "app.kubernetes.io/name=webapp,app.kubernetes.io/instance=my-webapp" -o jsonpath="\{.items[0].metadata.name\}")
+
+export CONTAINER_PORT=$(kubectl get pod --namespace default $POD_NAME -o jsonpath="\{.spec.containers[0].ports[0].containerPort\}")
+
+kubectl --namespace default port-forward $POD_NAME 8081:$CONTAINER_PORT
+```
+Visit http://127.0.0.1:8080
+
+## Step 5: Integrating Helm with CI/CD (Jenkins)
+
+### A. Integrate Helm with Jenkins
+
+**1. Jenkins setup:**
+
+Install Jenkins on your system with the default recommended plugins.
+
+![alt text](<Images/jenkins installation.PNG>)
+
+**2. Determine Helm Binary Path:**
+
+The full binary path of Helm is required in the Jenkins pipeline script.
+
+To find it, use 
+
+- Linux/macOS: `which helm`
+- Windows: `Get-command helm | select-object -ExpandProperty Source` in powershell.
+
+![alt text](<Images/binary path.PNG>)
+
+
+**3. Create a Jenkins Pipeline:**
+
+- In Jenkins, create a new pipeline job.
+- Set the pipeline source as the git repository you pushed your code to.
+- Configure the pipeline to trigger on build on commit to your repository.
+
+**3. Pipeline Script example with full Helm path:**
+
+- Use the determned full path of Helm in the in the pipeline script. For example:
+
+```
+pipeline \{
+  agent any
+  stages \{
+    stage('Deploy with Helm') \{
+      steps \{
+        script \{
+          sh '/usr/local/bin/helm upgrade --install my-app ./app --namespace default'
+        \}
+      \}
+    \}
+  \}
+\}
+```
+Replace `/usr/local/bin/helm` with the path determined in step 2.
+
+![alt text](Images/Jenkinsfile.PNG)
+
+### B. Update Helm chart and trigger Jenkins pipeline.
+
+**1. Update Helm chart and push changes:**
+
+- Edit the `values.yaml` file
+  - Open  values.yaml  in your `my-webapp` chart directory.
+  - Change the `replicaCount` to 3 to increase the number of replicas.
+  - Save the changes.
+
+- Edit the `templates/deployment.yaml` file:
+  - Open `deployment.yaml` file located in the `templates` directory. 
+  - Locate the `resources` section under `spec.template.spec.containers`.
+  - Update the resource request as follows:
+
+  ```
+  resources:
+  requests:
+    memory: "180Mi"
+    cpu: "120m"
+  ```
+- Save the file after making your changes.
+
+**2. Commit and push changes:**
+
+- Use git commands to commit your changes and push them to the remote repository. This will trigger the Jenkins pipeline.
+
+- Execute the following commands in your terminal
+```
+git add .
+git commit -m "Updated replicas, memory and CPU requests"
+git push
+```
+
+**3. Jenkins Pipeline Trigger:**
+- Once you push ypur changes to the repository, the configured Henkins pipeline will detect the commit.
+- Jenkins will then automatically start a new build, deploying your updated Helm chart with the new configuration,
+
+
+![alt text](<Images/The End.PNG>)
