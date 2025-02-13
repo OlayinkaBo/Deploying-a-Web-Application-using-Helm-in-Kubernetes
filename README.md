@@ -141,8 +141,41 @@ image:
 
 - Save your changes
 
+
 2. Customize `templates/deployment.yaml`:
 
 - Open the `deployment.yaml` file in the `templates/` directory.
 
-- Remove the line below from under 
+- Remove the line below from under `spec.template.spec.containers.resources`.
+
+\{\{- toYaml .Values.resources | nindent 12 \}\}
+
+-Add a simple resource request and limit under `spec.template.spec.containers.resources`.
+ This helps Kubernetes to mange resources efficiently. 
+
+```
+ resources:
+  requests:
+    memory: "128Mi"
+    cpu: "100m"
+  limits:
+    memory: "256Mi"
+    cpu: "200m"
+```
+
+![alt text](Images/deployment.PNG)
+
+- The above settings specify that your deployment should request 128Mi of memory and 100m of CPU but it won't use more that 256Mi of memory and 200m of CPU. 
+
+- Save the file after making your changes. 
+
+3. Commit and push changes 
+
+```
+git add .
+git commit -m "Customized Helm chart"
+git push
+```
+
+![alt text](<Images/customized Helm chart.PNG>)
+
