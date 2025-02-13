@@ -13,7 +13,7 @@ We will deploy a simple web application in a kubernetes cluster using Helm. This
 1. Install Helm as well as other tools and packages.
 2. Create a new Helm chart
 3. Customize the Helm chart
-4. Deploying and Application
+4. Deploying the Application
 5. Integrating Helm with CI/CD (Jenkins)
 6. Update Helm chart and trigger Jenkins pipeline.
 
