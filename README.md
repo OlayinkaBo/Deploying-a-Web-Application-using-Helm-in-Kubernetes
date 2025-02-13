@@ -256,6 +256,7 @@ pipeline {
     }
   }
 }
+
 ```
 Replace `/usr/local/bin/helm` with the path determined in step 2.
 
