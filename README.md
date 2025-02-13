@@ -267,7 +267,7 @@ Replace `/usr/local/bin/helm` with the path determined in step 2.
 **1. Update Helm chart and push changes:**
 
 - Edit the `values.yaml` file
-  - Open  values.yaml  in your `my-app` chart directory.
+  - Open  values.yaml in your `my-app` chart directory.
   - Change the `replicaCount` to 3 to increase the number of replicas.
   - Save the changes.
 
