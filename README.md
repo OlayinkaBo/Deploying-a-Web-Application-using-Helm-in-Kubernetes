@@ -244,18 +244,18 @@ To find it, use
 - Use the determned full path of Helm in the in the pipeline script. For example:
 
 ```
-pipeline \{
+pipeline {
   agent any
-  stages \{
-    stage('Deploy with Helm') \{
-      steps \{
-        script \{
-          sh '/usr/local/bin/helm upgrade --install my-app ./app --namespace default'
-        \}
-      \}
-    \}
-  \}
-\}
+  stages {
+    stage('Deploy with Helm') {
+      steps {
+        script {
+          sh '/usr/sbin/helm upgrade --install my-app ./app --namespace default'
+        }
+      }
+    }
+  }
+}
 ```
 Replace `/usr/local/bin/helm` with the path determined in step 2.
 
